@@ -7,6 +7,8 @@ import com.paradigms.project.validation.PrologValidator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.time.Duration;
 import java.util.Arrays;
@@ -38,6 +40,26 @@ public class ProjectConfig {
     ) {
         List<String> cmd = splitCommand(prologCommand);
         return new PrologValidator(runner, cmd, Duration.ofSeconds(timeoutSeconds));
+    }
+
+    @Bean
+    public WebMvcConfigurer corsConfigurer(@Value("${app.cors.allowed-origins:*}") String allowedOriginsProp) {
+        return new WebMvcConfigurer() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                String[] origins = Arrays.stream(allowedOriginsProp.split(","))
+                        .map(String::trim)
+                        .filter(s -> !s.isEmpty())
+                        .toArray(String[]::new);
+
+                registry.addMapping("/**")
+                        .allowedOrigins(origins)
+                        .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
+                        .allowedHeaders("*")
+                        .allowCredentials(false)
+                        .maxAge(3600);
+            }
+        };
     }
 
     private static List<String> splitCommand(String commandLine) {

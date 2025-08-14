@@ -17,10 +17,27 @@ RUN mvn -q -DskipTests package
 FROM eclipse-temurin:21-jre
 WORKDIR /app
 
-# Install SWI-Prolog for validator and GHC (for runghc) so the GA wrapper can run automatically
-# Using Debian-based image: install Debian packages that provide `swipl` and `runghc`
+# Install SWI-Prolog for validator, GHC (for runghc fallback), and Haskell Stack
+# Also pre-install Stack resolver lts-21.25 so haskell/ga-exec can run with Stack immediately
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends swi-prolog-nox ghc \
+    && apt-get install -y --no-install-recommends \
+       swi-prolog-nox \
+       ghc \
+       curl \
+       ca-certificates \
+       xz-utils \
+    && curl -sSL https://get.haskellstack.org/ | sh \
+    && stack --version \
+    && stack update \
+    && stack setup --resolver lts-21.25 \
+    && echo 'main = putStrLn "ok"' > /tmp/Deps.hs \
+    && stack script \
+         --resolver lts-21.25 \
+         --package aeson \
+         --package bytestring \
+         --package random \
+         /tmp/Deps.hs \
+    && rm -f /tmp/Deps.hs \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy built JAR and required tool folders

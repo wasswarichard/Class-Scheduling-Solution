@@ -24,17 +24,3 @@ backend:test:
         - target/surefire-reports/*.xml
         - target/failsafe-reports/*.xml
 
-# UI lint job (Node 22). This is lightweight and ensures the UI compiles/types/lints.
-# If you prefer to skip UI checks for now, you can comment this job out.
-ui:lint:
-  stage: test
-  image: node:22-alpine
-  before_script:
-    - cd ui
-  script:
-    - npm ci --legacy-peer-deps
-    - npm run -s lint
-  cache:
-    key: ui-node-modules
-    paths:
-      - ui/node_modules

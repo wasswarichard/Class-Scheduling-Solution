@@ -1,0 +1,40 @@
+stages:
+  - test
+
+# Global caches to speed up repeated pipeline runs
+cache:
+  paths:
+    - .m2/repository
+
+# Backend test job (Java 21 + Maven)
+backend:test:
+  stage: test
+  image: maven:3.9.9-eclipse-temurin-21
+  variables:
+    MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
+  script:
+    - mvn -B -q test
+  artifacts:
+    when: always
+    paths:
+      - target/surefire-reports/*
+      - target/failsafe-reports/*
+    reports:
+      junit:
+        - target/surefire-reports/*.xml
+        - target/failsafe-reports/*.xml
+
+# UI lint job (Node 22). This is lightweight and ensures the UI compiles/types/lints.
+# If you prefer to skip UI checks for now, you can comment this job out.
+ui:lint:
+  stage: test
+  image: node:22-alpine
+  before_script:
+    - cd ui
+  script:
+    - npm ci --legacy-peer-deps
+    - npm run -s lint
+  cache:
+    key: ui-node-modules
+    paths:
+      - ui/node_modules

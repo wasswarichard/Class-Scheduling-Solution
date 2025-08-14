@@ -1,5 +1,6 @@
 {
-  "name": "my-v0-project",
+  "name": "paradigm-ui",
+  "description": "A collection of UI components for Paradigm.",
   "version": "0.1.0",
   "private": true,
   "scripts": {

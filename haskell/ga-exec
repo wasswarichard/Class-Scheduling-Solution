@@ -1,0 +1,28 @@
+#!/usr/bin/env sh
+# Wrapper to execute the Haskell GA from this project.
+# It reads JSON from stdin and writes JSON to stdout.
+#
+# Prefer Stack with explicit packages, fallback to runghc with -package flags.
+# If neither is available, prints a clear error message and exits non‑zero.
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+MAIN_HS="$SCRIPT_DIR/GeneticSchedule.hs"
+
+if command -v stack >/dev/null 2>&1; then
+  # Use stack in script mode with required packages
+  exec stack script \
+    --resolver lts-21.25 \
+    --package aeson \
+    --package bytestring \
+    --package random \
+    -- "$MAIN_HS"
+elif command -v runghc >/dev/null 2>&1; then
+  # Use runghc and expose hidden packages explicitly
+  exec runghc -package aeson -package bytestring -package random "$MAIN_HS"
+else
+  {
+    echo "Error: Neither 'stack' nor 'runghc' was found in PATH.";
+    echo "Please install Stack or GHC (runghc), or override 'app.haskell.ga.command' to point to your GA executable.";
+  } 1>&2
+  exit 1
+fi

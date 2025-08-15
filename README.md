@@ -233,3 +233,34 @@ Base path: `/api/schedule` (consumes/produces `application/json`)
   - Response: `{ "schedule": Schedule, "validation": ValidationResult }`
 
 See `src/main/java/com/paradigms/project/web/SchedulingController.java` for signatures and DTOs.
+
+
+## Running Tests (Java with Maven and Haskell)
+
+Prerequisites:
+- Java Development Kit (JDK) 21 available on PATH (JAVA_HOME set accordingly)
+- Maven Wrapper included in this repo (use ./mvnw or mvnw.cmd on Windows)
+- For Haskell tests/examples: either Stack or GHC/runghc installed (e.g., via GHCup)
+
+Java tests (Maven):
+- Run all tests:
+  - ./mvnw test
+- Clean and run tests:
+  - ./mvnw clean test
+- Run a single test class (example):
+  - ./mvnw -Dtest=com.multiparadigm.scheduler.validation.PrologValidatorTest test
+- Run a single test method (example):
+  - ./mvnw -Dtest=com.multiparadigm.scheduler.ga.HaskellGAClientTest#parsesScheduleFromStdout test
+
+Notes:
+- Unit tests stub external processes, so you do not need SWI-Prolog or Haskell installed to run mvn test.
+- On Windows, use mvnw.cmd instead of ./mvnw.
+
+Haskell tests/examples:
+- Quick unit tests for the GA fitness function:
+  - runghc haskell/GeneticScheduleTest.hs
+- Or compile and run the test once with GHC:
+  - ghc -O2 -package aeson -package bytestring -package random haskell/GeneticScheduleTest.hs -o haskell/ga-test && ./haskell/ga-test
+- End-to-end sample run of the GA with the provided fixture (writes Schedule JSON to stdout):
+  - chmod +x haskell/ga-exec   # first time only
+  - cat haskell/genetic_schedule_e2e_test_data.json | haskell/ga-exec

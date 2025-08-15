@@ -292,35 +292,8 @@ export default function BuilderPage() {
                 </Button>
               </div>
 
-              <div className="grid sm:grid-cols-2 gap-4">
-                <Button
-                  variant="outline"
-                  onClick={() => setShowProblemModal(true)}
-                  className="flex items-center space-x-2 bg-transparent"
-                >
-                  <Upload className="h-5 w-5" />
-                  <span>Import/Export Problem</span>
-                </Button>
 
-                <Button
-                  variant="outline"
-                  onClick={() => setShowScheduleModal(true)}
-                  className="flex items-center space-x-2 bg-transparent"
-                >
-                  <Download className="h-5 w-5" />
-                  <span>Export Last Schedule</span>
-                </Button>
-              </div>
 
-              {/* Form Status */}
-              <div className="text-sm text-muted-foreground">
-                {!isFormValid && (
-                  <p className="flex items-center space-x-2">
-                    <AlertTriangle className="h-4 w-4 text-orange-500" />
-                    <span>Please add at least one item to each section to enable schedule generation.</span>
-                  </p>
-                )}
-              </div>
             </div>
           </CardContent>
         </Card>

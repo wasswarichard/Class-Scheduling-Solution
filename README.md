@@ -1,14 +1,15 @@
 # Class Scheduling Solution
-A multi-paradigm course scheduling service using Spring Boot, Haskell, and Prolog.
+A multi‑paradigm course scheduling service using Spring Boot (Java), Haskell (genetic algorithm), SWI‑Prolog (validation), and Next.js (UI) that accepts a SchedulingProblem and provides endpoints to generate and validate schedules.
 
 ## Group Information
 
-- \*\*Group Number\*\*: 5
-- \*\*Group Members\*\*:
-    - Degefaw, Eyouale
-    - Wasswa, Richard
-    - Ali, Husam
-    - Velenczei, Adam
+- Group Number: 5
+- Group Members:
+  - Degefaw, Eyouale
+  - Wasswa, Richard
+  - Ali, Husam
+  - Velenczei, Adam
+
 ---
 
 
@@ -30,6 +31,28 @@ The service accepts a SchedulingProblem (courses, lectures, rooms, time slots), 
 \- **Ali, Husam**: Authored the project report, contributed to Dockerization, CI/CD configuration, documentation, and supported Haskell GA and Prolog validator testing.
 
 \- **Velenczei, Adam**: Assisted with general project tasks, contributed to Haskell GA module testing and Prolog validator improvements.
+
+# Introduction
+- This project implements a class scheduling system using a mixed-paradigm architecture, integrating imperative, functional, and declarative programming alongside a modern web interface. The goal is to automatically generate and validate class schedules that satisfy predefined constraints while providing an intuitive interface for interaction.
+- The Haskell component employs a simplified genetic algorithm to produce candidate schedules. Each schedule is represented as a chromosome — a list of lecture assignments mapping lectures to specific rooms and timeslots. The fitness function rewards capacity-satisfied assignments and penalises conflicts involving room or time overlaps. Genetic operators include elitist truncation selection, uniform per-gene crossover, and single-gene mutation. The current scope runs a single generation, with planned extensions for multi-generation loops, richer fitness metrics, tournament selection, and reproducible seeding. 
+- The Prolog validator (`validator.pl`) enforces exactly three explicit scheduling rules:
+  - Capacity not exceeded each assigned room must accommodate the enrolled students. 
+  - No two different lectures in the same room and time — preventing double bookings. 
+  - No overlapping lectures of the same course in the same time — ensuring no student is required to attend two lectures at once for the same course.
+- By combining Haskell for smart searching, Prolog for rule checking, Java for integration, and Next.js for the user interface, the project shows that using different styles together makes scheduling simpler and more reliable.
+
+## Project Idea Description
+- This project is the simplest version of the class scheduling problem. The goal is to show that even a small example can be solved by combining different programming paradigms in one system.
+- Making a timetable for courses in a university is not an easy job. There are many `courses`, `lectures` and `rooms`, but only a limited number of time slots. If done by hand, this work takes a lot of time and can lead to mistakes, such as two lectures at the same time in the same room or a teacher being scheduled for two classes at once. This type of scheduling problem is an `NP-hard problem`, which means it is very hard to find the perfect solution quickly when the problem is big. Because of this, we use methods that can find good (but not always perfect) solutions in a reasonable time. In this project, we built a small scheduling service that can make and check timetables automatically. To create the schedules, we use a simple genetic algorithm (GA). This algorithm works like natural selection: it creates different schedules, checks which ones are better, and improves them step by step. In our case, the GA assigns lectures to rooms and predefined time slots to reduce conflicts. The system takes in a scheduling problem (list of courses, lectures, rooms, and time slots) and produces a timetable that meets the given rules. It can also check (validate) an existing timetable to make sure it follows all rules. If the timetable is not valid, the system will revalidate it and give a detailed report showing exactly which rules are being violated. 
+- The important part of this project is that it is built using multiple programming paradigms:
+### Imperative
+- Java (Spring Boot): backend REST API and coordination
+- Next.js: web user interface
+- Shell scripts: running and automating the whole stack
+### Declarative
+- Haskell: genetic algorithm (functional programming)
+- Prolog: checking hard constraints (logic programming)
+- By giving each paradigm the part it is best at — Java and Next.js for orchestration and UI, Haskell for complex schedule generation, and Prolog for precise rule checking — the project proves that even a small example of a class scheduling problem can be solved effectively using a multi-paradigm approach.
 
 ## Run everything with Docker Compose
 
@@ -54,6 +77,7 @@ Stop the project:
 Notes:
 - You can also skip rebuilding on subsequent runs: `docker compose up` (without `--build`) if nothing changed.
 - If ports 8080 or 3000 are in use, stop the conflicting process or change the ports in docker-compose.yml.
+
 
 ## Architecture Overview
 

@@ -1,17 +1,40 @@
-# Scheduling Project (GA + Prolog)
+# Class Scheduling Solution
+A multi-paradigm course scheduling service using Spring Boot, Haskell, and Prolog.
 
-This project demonstrates a simple course scheduling service that integrates three paradigms:
+## Group Information
+
+- \*\*Group Number\*\*: 5
+- \*\*Group Members\*\*:
+    - Degefaw, Eyouale
+    - Wasswa, Richard
+    - Ali, Husam
+    - Velenczei, Adam
+---
+
+
+This project demonstrates a simple course scheduling service that integrates four paradigms:
 - A Spring Boot REST API (Java)
 - A Genetic Algorithm for schedule generation (Haskell)
 - A Prolog validator for hard-constraint checking (SWI-Prolog)
+- A Next.js UI for user interaction
 
 The service accepts a SchedulingProblem (courses, lectures, rooms, time slots), generates a candidate schedule using a Haskell-based GA, and validates it with a Prolog program. It exposes endpoints to generate, validate, or do both in one request.
+
+
+## Contributions
+
+\- **Degefaw, Eyouale**: Implemented the Haskell genetic algorithm prototype, handled JSON parsing and printing, prepared sample data, and contributed to the Next.js UI.
+
+\- **Wasswa, Richard**: Developed the Java Spring Boot REST API, implemented Prolog constraints and validator rules, designed the JSON output structure, built fact conversion logic, orchestration service, command runner, integrated GA/Prolog, and wrote backend tests.
+
+\- **Ali, Husam**: Authored the project report, contributed to Dockerization, CI/CD configuration, and documentation.
+
+\- **Velenczei, Adam**: Assisted with general project tasks.
 
 ## Quick Start
 
 - Start the whole stack (backend + UI) with Docker Compose:
-  - ./run.sh
-  - Or: docker compose up --build
+  - docker compose up --build
 - Backend API: http://localhost:8080 (e.g., POST /api/schedule/generate)
 - UI: http://localhost:3000
 
@@ -144,18 +167,13 @@ Configuration (application.properties):
 ## Run everything with Docker Compose
 
 Prerequisites:
-- Docker and Docker Compose plugin installed
+\- Docker and Docker Compose plugin installed
 
 Commands:
-- Build and start all services:
-  - `./run.sh` (recommended) or `docker compose up --build`
-- Access the UI: http://localhost:3000
-- Backend API: http://localhost:8080 (e.g., POST http://localhost:8080/api/schedule/generate)
-
-Notes:
-- The backend image installs SWI-Prolog and GHC (runghc) so the included `haskell/ga-exec` wrapper runs automatically; you don't need to install Stack or GHC on your host when using Docker.
-- CORS is configured to allow the UI origin by default. You can change it via env var `APP_CORS_ALLOWED_ORIGINS` in `docker-compose.yml`.
-- To change backend port, set `SERVER_PORT` env var in compose, and update UI env `NEXT_PUBLIC_BACKEND_URL` if the UI uses it.
+\- Build and start all services:
+  \- `docker compose up --build`
+\- Access the UI: http://localhost:3000
+\- Backend API: http://localhost:8080 (e.g., POST http://localhost:8080/api/schedule/generate)
 
 ## Run UI only (development)
 
@@ -258,9 +276,3 @@ Note: Tests that rely on external binaries may mock the command runner or provid
 - The `DefaultCommandRunner` enforces a timeout and captures stdout/stderr.
 - `HaskellGAClient` and `PrologValidator` treat timeouts, non-zero exit codes, and blank outputs as errors.
 - JSON serialization is centralized via `JsonUtil` to keep configuration consistent.
-
-## License
-Specify your license here (e.g., MIT), if applicable.
-
-## Acknowledgements
-This project combines paradigms for educational purposes: functional programming (Haskell), logic programming (Prolog), and object-oriented/Spring for orchestration.

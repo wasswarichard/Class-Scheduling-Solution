@@ -78,6 +78,80 @@ Notes:
 - You can also skip rebuilding on subsequent runs: `docker compose up` (without `--build`) if nothing changed.
 - If ports 8080 or 3000 are in use, stop the conflicting process or change the ports in docker-compose.yml.
 
+##  Project Documentation and Structure
+- This project implements a course scheduling service that bridges three paradigms:
+Java (Spring Boot) REST API for orchestration
+Haskell Genetic Algorithm (GA) for candidate schedule generation
+SWI-Prolog for hard-constraint validation
+Next.js UI for interacting with the backend
+### Repository Structure
+* Backend (Spring Boot, Java):
+  - Source: `src/main/java/com/multiparadigm/scheduler`
+  - Tests: `src/test/java/com/multiparadigm/scheduler`
+* Haskell GA: `haskell/`
+* Prolog validator: `prolog/ `
+* UI (Next.js/TypeScript): `ui/`
+* Containerization/Tooling: `Dockerfile`, `ui/Dockerfile`, `docker-compose.yml`,
+
+#### Project Structure
+```NONE 
+├── Dockerfile
+├── README.md
+├── docker-compose.yml
+├── haskell
+│   ├── GeneticSchedule.hs
+│   ├── GeneticScheduleTest.hs
+│   ├── ga-exec
+│   └── genetic_schedule_e2e_test_data.json
+├── prolog
+│   └── validator.pl
+├── run.sh
+├── src
+│   ├── main
+│   │   ├── java
+│   │   └── resources
+│   └── test
+│       └── java
+└── ui
+```
+### 3.1.1 Answer to the question: "Why did you select the programming languages you used for your project?"
+#### Java :-
+- Strong static typing and object-oriented structure for reliable, maintainable code.
+- Simple to split into parts like configuration, orchestration, process runners, and adapters.
+- Spring Boot enables quick creation of a REST API for JSON-based communication with Haskell and Prolog.
+- Built-in support for spawning external processes, managing timeouts, and parsing JSON formats.
+- Good speed and supports running tasks in parallel.
+- All team members are already familiar with Java.
+
+#### Haskell:-
+- Functional style with strong typing helps avoid bugs and keep rules clear.
+- Lazy evaluation skips work that is not needed.
+- Short and clear code for crossover, mutation, and selection in the genetic algorithm
+- Isolated JSON interface (problem in, schedule out) for easy integration.
+- Fast compiled code, with the option to make only the slow parts faster when needed.
+- Easy for the team to follow, with one Haskell expert helping others.
+#### Prolog
+- Easy to write rules for scheduling (like no double-bookings or checking room sizes).
+- Backtracking quickly finds problems or confirms the schedule is valid.
+- Simple to add or change rules 
+#### Next.js
+- Well-known framework that connects easily to REST APIs.
+- The team already has experience using it.
+- Gives a ready-to-use UI system so we can focus more on backend work.
+- Reusable components save time when building the app.
+- Built-in routing works without extra setup.
+
+### 3.1.2 Answer to the question: "What was the most challenging parts of implementing this project? Please explain."
+- The hardest part was building the Genetic Algorithm  in Haskell and making it work well with our Java backend and the Prolog validator. GAs are a common search method, but we had to change the normal design so it would work for our scheduling problem. We needed to represent courses, rooms, and time slots in a way that was fast to check and could be sent and received as JSON between programs.
+- Haskell was not easy to learn, especially when writing GA functions like selection, crossover, and mutation in a clear and efficient way. We also had to make sure the GA would always finish quickly because the API had strict time limits. To keep things predictable, we only ran one generation: create the first set of schedules, score them, apply GA changes once, then choose the best result.
+- Another problem was keeping the same data format in all three languages (Java, Haskell, Prolog). Each language needed its own copy of the data structures and JSON code, so any change had to be made three times. This made maintenance harder and increased the risk of mistakes.
+- We also needed scripts to run the Haskell and Prolog programs from Java. The scripts had to compile or load the code, send JSON through standard input, read the output, and handle errors or timeouts.
+- Testing was also tricky writing tests directly for Prolog was hard because its rules are declarative and the output can be complex. To solve this, we wrote Java tests that called Prolog and compared its results with what we expected. This way, we could still use Java’s test tools.
+- Even if the GA gave us a good looking schedule, we always checked it in Prolog to make sure all hard rules were followed.
+
+
+In short, the hardest parts were designing the GA, making three languages talk to each other, keeping data formats in sync, managing runtime scripts, and testing Prolog. We chose a simpler GA with strong validation so the system would be reliable, even if it wasn’t always perfectly optimized.
+
 
 ## Architecture Overview
 

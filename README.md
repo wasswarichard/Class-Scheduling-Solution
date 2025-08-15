@@ -31,12 +31,18 @@ The service accepts a SchedulingProblem (courses, lectures, rooms, time slots), 
 
 \- **Velenczei, Adam**: Assisted with general project tasks, contributed to Haskell GA module testing and Prolog validator improvements.
 
-## Quick Start
+## Run everything with Docker Compose
 
-- Start the whole stack (backend + UI) with Docker Compose:
-  - docker compose up --build
-- Backend API: http://localhost:8080 (e.g., POST /api/schedule/generate)
-- UI: http://localhost:3000
+Prerequisites:
+\- Docker and Docker Compose plugin installed
+
+Commands:
+\- Build and start all services:
+\- `docker compose up --build`
+\- Access the UI: http://localhost:3000
+\- Backend API: http://localhost:8080 (e.g., POST http://localhost:8080/api/schedule/generate)
+
+
 
 ## Start the project (run everything)
 
@@ -143,16 +149,3 @@ Base path: `/api/schedule` (consumes/produces `application/json`)
   - Response: `{ "schedule": Schedule, "validation": ValidationResult }`
 
 See `src/main/java/com/paradigms/project/web/SchedulingController.java` for signatures and DTOs.
-
-
-## Run everything with Docker Compose
-
-Prerequisites:
-\- Docker and Docker Compose plugin installed
-
-Commands:
-\- Build and start all services:
-  \- `docker compose up --build`
-\- Access the UI: http://localhost:3000
-\- Backend API: http://localhost:8080 (e.g., POST http://localhost:8080/api/schedule/generate)
-

@@ -216,25 +216,7 @@ In Docker, these are already wired in the Dockerfile entrypoint and docker-compo
 - Generate and validate:
   - `curl -sS -X POST http://localhost:8080/api/schedule/generate-and-validate -H 'Content-Type: application/json' -d '{"courses":[],"lectures":[],"rooms":[],"timeSlots":[]}'`
 
-## Data Contracts (JSON)
 
-Key records are defined under `src/main/java/com/paradigms/project/model` and serialized with Jackson via `JsonUtil`:
-- SchedulingProblem: `{courses, lectures, rooms, timeSlots}`
-- Schedule: `{assignments: [{lectureId, roomId, timeSlotId}], score: number?}`
-- ValidationResult: `{valid: boolean, violations: [...]}`
-
-## Toolchain Notes
-
-- Haskell GA
-  - Input: JSON SchedulingProblem on stdin
-  - Output: JSON Schedule on stdout
-  - Example standalone run:
-    - `cat haskell/genetic_schedule_e2e_test_data.json | haskell/ga-exec`
-- Prolog validator (SWI-Prolog)
-  - Input: Prolog facts on stdin (see `PrologValidator.toFacts`)
-  - Output: JSON ValidationResult on stdout
-- Installing SWI-Prolog locally (Debian/Ubuntu):
-  - `sudo apt-get update && sudo apt-get install -y swipl`
 
 ## Running Tests
 
@@ -256,23 +238,3 @@ Note: Tests that rely on external binaries may mock the command runner or provid
 - UI (Next.js): `ui/`
 - Containerization: `Dockerfile`, `ui/Dockerfile`, `docker-compose.yml`, `run.sh`
 - Build: `pom.xml`, `mvnw`, `mvnw.cmd`
-
-## Troubleshooting
-
-- Backend cannot find ga-exec:
-  - Ensure `haskell/ga-exec` exists and is executable: `chmod +x haskell/ga-exec`
-  - Override path via `APP_HASKELL_GA_COMMAND` or `--app.haskell.ga.command`
-- Prolog not installed (local dev):
-  - Install SWI-Prolog (see Toolchain Notes), or run with Docker Compose.
-- CORS errors from UI:
-  - Set `APP_CORS_ALLOWED_ORIGINS` to include your UI origin (comma-separated).
-- Timeouts when invoking external tools:
-  - Increase `APP_PROCESS_TIMEOUT_SECONDS`.
-- Ports already in use:
-  - Change `SERVER_PORT` (backend) or `PORT` (UI) and update compose/env accordingly.
-
-## Development Notes
-
-- The `DefaultCommandRunner` enforces a timeout and captures stdout/stderr.
-- `HaskellGAClient` and `PrologValidator` treat timeouts, non-zero exit codes, and blank outputs as errors.
-- JSON serialization is centralized via `JsonUtil` to keep configuration consistent.

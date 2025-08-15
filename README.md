@@ -144,25 +144,6 @@ Base path: `/api/schedule` (consumes/produces `application/json`)
 
 See `src/main/java/com/paradigms/project/web/SchedulingController.java` for signatures and DTOs.
 
-## Building and Running
-
-Requirements:
-- Java 17+
-- Maven 3.8+
-- SWI-Prolog installed and available on PATH (for the validator)
-- GHC or a Haskell toolchain to build the GA executable, or use `stack`/`cabal` as preferred
-
-Steps:
-1. Build the project
-   - `./mvnw -q -DskipTests package`
-2. Build the Haskell GA (example using GHC)
-   - `ghc -O2 -o haskell/ga-exec haskell/GeneticSchedule.hs`
-   - Ensure the resulting `haskell/ga-exec` binary is executable and referenced by the Java configuration
-3. Run the Spring Boot app
-   - `./mvnw spring-boot:run`
-
-Configuration (application.properties):
-- You can wire external command paths and timeouts via Spring config or explicit bean wiring. By default, tests construct clients with explicit commands. If you introduce Spring beans for GA/Prolog clients, document their properties here.
 
 ## Run everything with Docker Compose
 
@@ -175,66 +156,3 @@ Commands:
 \- Access the UI: http://localhost:3000
 \- Backend API: http://localhost:8080 (e.g., POST http://localhost:8080/api/schedule/generate)
 
-## Run UI only (development)
-
-From `ui/`:
-- `npm install`
-- `npm run dev`
-
-Then point the UI to a running backend at http://localhost:8080. If the UI expects `NEXT_PUBLIC_BACKEND_URL`, export it before running: `export NEXT_PUBLIC_BACKEND_URL=http://localhost:8080`.
-
-## Local Development (backend only)
-
-- Ensure tools are available on your machine:
-  - SWI-Prolog: `swipl --version`
-  - Haskell GA binary: ensure `haskell/ga-exec` exists and is executable (see build above)
-- Run backend:
-  - `./mvnw spring-boot:run`
-- Override commands/timeout via properties or env:
-  - `--app.haskell.ga.command=haskell/ga-exec`
-  - `--app.prolog.validator.command="swipl -q -s prolog/validator.pl -t main"`
-  - `--app.process.timeout.seconds=20`
-  - `--app.cors.allowed-origins=http://localhost:3000`
-
-## Environment Variables and Configuration
-
-These map to Spring properties configured in `ProjectConfig`:
-- APP_HASKELL_GA_COMMAND -> `app.haskell.ga.command` (default: `haskell/ga-exec`)
-- APP_PROLOG_VALIDATOR_COMMAND -> `app.prolog.validator.command` (default: `swipl -q -s prolog/validator.pl -t main`)
-- APP_PROCESS_TIMEOUT_SECONDS -> `app.process.timeout.seconds` (default: 10)
-- APP_CORS_ALLOWED_ORIGINS -> `app.cors.allowed-origins` (default: `*`)
-- SERVER_PORT -> `server.port` (default: 8080)
-
-In Docker, these are already wired in the Dockerfile entrypoint and docker-compose.yml.
-
-## Example API Usage (curl)
-
-- Generate schedule:
-  - `curl -sS -X POST http://localhost:8080/api/schedule/generate -H 'Content-Type: application/json' -d '{"courses":[],"lectures":[],"rooms":[],"timeSlots":[]}'`
-- Validate schedule:
-  - `curl -sS -X POST http://localhost:8080/api/schedule/validate -H 'Content-Type: application/json' -d '{"problem":{"courses":[],"lectures":[],"rooms":[],"timeSlots":[]},"schedule":{"assignments":[]}}'`
-- Generate and validate:
-  - `curl -sS -X POST http://localhost:8080/api/schedule/generate-and-validate -H 'Content-Type: application/json' -d '{"courses":[],"lectures":[],"rooms":[],"timeSlots":[]}'`
-
-
-
-## Running Tests
-
-- Unit and integration tests:
-  - `./mvnw -q test`
-- Notable tests:
-  - `JsonUtilTest` validates JSON utilities
-  - `HaskellGAClientTest` exercises GA client parsing behavior
-  - `PrologValidatorTest` validates Prolog fact generation and parsing
-  - `IntegrationFlowTest` covers end-to-end flow with sample data
-
-Note: Tests that rely on external binaries may mock the command runner or provide test fixtures instead.
-
-## Repository Structure
-
-- Backend (Spring Boot): `src/main/java/com/paradigms/project` and `src/test/java/...`
-- Haskell GA: `haskell/`
-- Prolog validator: `prolog/`
-- UI (Next.js): `ui/`
-- Containerization: `Dockerfile`, `ui/Dockerfile`, `docker-compose.yml`, `run.sh`
-- Build: `pom.xml`, `mvnw`, `mvnw.cmd`

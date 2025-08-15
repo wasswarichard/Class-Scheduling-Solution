@@ -152,7 +152,9 @@ Next.js UI for interacting with the backend
 
 In short, the hardest parts were designing the GA, making three languages talk to each other, keeping data formats in sync, managing runtime scripts, and testing Prolog. We chose a simpler GA with strong validation so the system would be reliable, even if it wasn’t always perfectly optimized.
 
-
+### 3.1.2 Answer to the question: " Does your implementation run and behave as expected? If not, what was the issue?"
+- Yes, the implementation runs and behaves as expected. The system can generate schedules based on a given problem and validate them against hard constraints. The integration between the Java backend, Haskell GA, and Prolog validator works correctly, allowing for seamless communication and data exchange.
+- Run the docker compose and access the UI at http://localhost:3000. You can generate schedules, validate them, and see the results in the browser.
 ## Architecture Overview
 
 - Java (Spring Boot)
@@ -252,15 +254,9 @@ Java tests (Maven):
 - Run a single test method (example):
   - ./mvnw -Dtest=com.multiparadigm.scheduler.ga.HaskellGAClientTest#parsesScheduleFromStdout test
 
-Notes:
-- Unit tests stub external processes, so you do not need SWI-Prolog or Haskell installed to run mvn test.
-- On Windows, use mvnw.cmd instead of ./mvnw.
-
-Haskell tests/examples:
-- Quick unit tests for the GA fitness function:
-  - runghc haskell/GeneticScheduleTest.hs
-- Or compile and run the test once with GHC:
-  - ghc -O2 -package aeson -package bytestring -package random haskell/GeneticScheduleTest.hs -o haskell/ga-test && ./haskell/ga-test
+Haskell tests:
+- Run Unit tests for the GA fitness function:
+  -  stack script --resolver lts-21.25 -- haskell/GeneticScheduleTest.hs
 - End-to-end sample run of the GA with the provided fixture (writes Schedule JSON to stdout):
   - chmod +x haskell/ga-exec   # first time only
-  - cat haskell/genetic_schedule_e2e_test_data.json | haskell/ga-exec
+  - cat haskell/genetic_schedule_e2e_test_data.json | haskell/ga-exec # update the genetic_schedule_e2e_test_data.json file with your own data

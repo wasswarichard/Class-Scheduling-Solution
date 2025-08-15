@@ -42,20 +42,6 @@ Commands:
 \- Access the UI: http://localhost:3000
 \- Backend API: http://localhost:8080 (e.g., POST http://localhost:8080/api/schedule/generate)
 
-
-
-## Start the project (run everything)
-
-Prerequisites:
-- Docker Desktop or Docker Engine with the Docker Compose plugin
-
-Run everything (backend + UI):
-- macOS/Linux:
-  - Make the script executable once: `chmod +x ./run.sh`
-  - Start: `./run.sh`
-- Windows (PowerShell):
-  - `docker compose up --build`
-
 What the command does:
 - Builds both images (backend and UI)
 - Starts both containers on a shared network

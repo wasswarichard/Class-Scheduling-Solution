@@ -253,7 +253,7 @@ See `src/main/java/com/paradigms/project/web/SchedulingController.java` for sign
 - End-to-end sample run of the GA with the provided fixture (writes Schedule JSON to stdout):
 ```shell
     chmod +x haskell/ga-exec   # first time only
-```
-```shell
-  cat haskell/genetic_schedule_e2e_test_data.json | haskell/ga-exec # update the genetic_schedule_e2e_test_data.json file with your own data
+    
+    cat haskell/genetic_schedule_e2e_test_data.json | haskell/ga-exec # update the genetic_schedule_e2e_test_data.json file with your own data
+    
 ```

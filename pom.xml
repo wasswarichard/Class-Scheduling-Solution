@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.paradigms</groupId>
-    <artifactId>project</artifactId>
+    <artifactId>multi-paradigm-class-scheduler</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>project</name>
     <description>project</description>

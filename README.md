@@ -1,16 +1,6 @@
 # Class Scheduling Solution
 A multi‑paradigm course scheduling service using Spring Boot (Java), Haskell (genetic algorithm), SWI‑Prolog (validation), and Next.js (UI) that accepts a SchedulingProblem and provides endpoints to generate and validate schedules.
 
-## Group Information
-
-- Group Number: 5
-- Group Members:
-  - Degefaw, Eyouale
-  - Wasswa, Richard
-  - Ali, Husam
-  - Velenczei, Adam
-
----
 
 
 This project demonstrates a simple course scheduling service that integrates four paradigms:

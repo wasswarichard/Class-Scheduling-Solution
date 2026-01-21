@@ -12,16 +12,6 @@ This project demonstrates a simple course scheduling service that integrates fou
 The service accepts a SchedulingProblem (courses, lectures, rooms, time slots), generates a candidate schedule using a Haskell-based GA, and validates it with a Prolog program. It exposes endpoints to generate, validate, or do both in one request.
 
 
-## Contributions
-
-\- **Degefaw, Eyouale**: Implemented the Haskell genetic algorithm prototype, handled JSON parsing and printing, prepared sample data, contributed to the Next.js UI, and assisted with Prolog validator logic.
-
-\- **Wasswa, Richard**: Developed the Java Spring Boot REST API, implemented Prolog constraints and validator rules, designed the JSON output structure, built fact conversion logic, orchestration service, command runner, integrated GA/Prolog, wrote backend tests, and contributed to Haskell GA integration.
-
-\- **Ali, Husam**: Authored the project report, contributed to Dockerization, CI/CD configuration, documentation, and supported Haskell GA and Prolog validator testing.
-
-\- **Velenczei, Adam**: Assisted with general project tasks, contributed to Haskell GA module testing and Prolog validator improvements.
-
 # Introduction
 - This project implements a class scheduling system using a mixed-paradigm architecture, integrating imperative, functional, and declarative programming alongside a modern web interface. The goal is to automatically generate and validate class schedules that satisfy predefined constraints while providing an intuitive interface for interaction.
 - The Haskell component employs a simplified genetic algorithm to produce candidate schedules. Each schedule is represented as a chromosome — a list of lecture assignments mapping lectures to specific rooms and timeslots. The fitness function rewards capacity-satisfied assignments and penalises conflicts involving room or time overlaps. Genetic operators include elitist truncation selection, uniform per-gene crossover, and single-gene mutation. The current scope runs a single generation, with planned extensions for multi-generation loops, richer fitness metrics, tournament selection, and reproducible seeding. 
